@@ -1,0 +1,55 @@
+{
+  "$comment": "Fields to ADD to the existing OnSocial Base44 entities (existing fields are unchanged). Apply with update_entity_schema or the Base44 editor. See docs/BASE44_INTEGRATION.md.",
+  "provenance_field": {
+    "data_sources": {
+      "type": "object",
+      "description": "Provenance per field: { field_name: { source, url, fetched_at, note } }. source is one of google_places, meta_graph, facebook_graph, serpapi, apify, manual. Values without an entry here are shown as 'not available' in reports."
+    }
+  },
+  "entities": {
+    "Prospect": {
+      "data_sources": { "$ref": "#/provenance_field/data_sources" }
+    },
+    "Competitor": {
+      "data_sources": { "$ref": "#/provenance_field/data_sources" },
+      "market_position": { "type": "string", "enum": ["leader", "challenger", "niche", "laggard", "insufficient"], "description": "Quadrant from the competitor position table" },
+      "market_rank": { "type": "number", "description": "Rank in the local market (1 = strongest)" },
+      "market_position_score": { "type": "number", "description": "Composite market position score 0-100, relative to the local cohort" },
+      "out_of_radius": { "type": "boolean", "default": false, "description": "No longer returned by Google Places within the search radius; excluded from reports" },
+      "last_seen_at": { "type": "string", "format": "date-time" },
+      "google_maps_url": { "type": "string" }
+    },
+    "SocialProfile": {
+      "data_sources": { "$ref": "#/provenance_field/data_sources" },
+      "data_source": { "type": "string", "description": "Record-level source when per-field provenance is not available" },
+      "fetched_at": { "type": "string", "format": "date-time" },
+      "avg_comments": { "type": "number" },
+      "not_found_reason": { "type": "string" }
+    },
+    "ReviewData": {
+      "data_sources": { "$ref": "#/provenance_field/data_sources" },
+      "data_source": { "type": "string" },
+      "fetched_at": { "type": "string", "format": "date-time" }
+    },
+    "Report": {
+      "market_position": { "type": "string", "enum": ["leader", "challenger", "niche", "laggard", "insufficient"] },
+      "market_rank": { "type": "number" },
+      "market_position_score": { "type": "number" },
+      "competitor_table": { "type": "object", "description": "Full competitor market-position table (rows, columns, scores, citations) from buildCompetitorTable" },
+      "analytical_report": { "type": "object", "description": "Output of the Analytical Agent: findings, metrics, concentration, relationships, data quality, methodology" },
+      "analytical_summary": { "type": "string", "description": "Executive analysis narrative (LLM text kept only if every number is verified against the data)" },
+      "data_sources": { "type": "array", "description": "Numbered citation list used by the footnotes", "items": { "type": "object", "properties": { "id": { "type": "number" }, "source": { "type": "string" }, "label": { "type": "string" }, "label_ar": { "type": "string" }, "url": { "type": "string" }, "fetched_at": { "type": "string" } } } },
+      "data_quality": { "type": "object", "properties": { "coverage_pct": { "type": "number" }, "grade": { "type": "string" } } },
+      "analysis_generated_at": { "type": "string", "format": "date-time" }
+    },
+    "AgencySettings": {
+      "api_keys": {
+        "type": "object",
+        "description": "Add meta_ig_user_id next to the existing keys.",
+        "properties": {
+          "meta_ig_user_id": { "type": "string", "description": "Instagram Business account ID of the agency (needed for Business Discovery lookups of other accounts)" }
+        }
+      }
+    }
+  }
+}

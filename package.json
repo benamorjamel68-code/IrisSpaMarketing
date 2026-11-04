@@ -1,0 +1,21 @@
+{
+  "name": "onsocial-report-engine",
+  "version": "1.0.0",
+  "description": "OnSocial prospect reporting engine: sourced-data provenance, competitor market-position table and analytical agent. Zero dependencies; runs in Node 22+ and in Base44 (Deno) backend functions.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\"",
+    "build:base44": "node scripts/build-base44.mjs",
+    "check": "node scripts/build-base44.mjs --check && node --test \"test/**/*.test.js\"",
+    "demo": "node scripts/demo.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
